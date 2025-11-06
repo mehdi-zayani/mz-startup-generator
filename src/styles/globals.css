@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global overrides or base styles */
+html,
 body {
-  @apply antialiased;
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, sans-serif;
 }

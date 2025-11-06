@@ -3,13 +3,13 @@ import "../styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Startup Idea Generator",
-  description: "Generate creative, funny, and random startup ideas in seconds.",
+  description: "Generate unique startup ideas instantly with AI.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-900 antialiased">
+      <body className="bg-neutral-50 text-neutral-900 min-h-screen flex flex-col items-center justify-center">
         {children}
       </body>
     </html>

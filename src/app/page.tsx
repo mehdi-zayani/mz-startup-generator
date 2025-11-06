@@ -1,16 +1,14 @@
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center text-center p-6">
-      <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-pink-500 bg-clip-text text-transparent">
-        Startup Idea Generator
-      </h1>
-      <p className="text-lg text-gray-600 max-w-md">
-        Generate creative, funny, and sometimes genius startup ideas in seconds.
+    <main className="text-center space-y-6">
+      <h1 className="text-4xl font-bold">🚀 Startup Idea Generator</h1>
+      <p className="text-neutral-600">
+        Get a fresh business idea powered by AI. Click the button below to generate your next big
+        thing.
       </p>
-
-      <div className="mt-10 px-6 py-3 bg-black text-white rounded-xl shadow hover:bg-gray-800 transition">
-        Tailwind 3 Working ✅
-      </div>
+      <button className="px-6 py-3 bg-black text-white rounded-xl hover:bg-neutral-800 transition">
+        Generate Idea
+      </button>
     </main>
   );
 }
