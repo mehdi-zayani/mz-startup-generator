@@ -7,10 +7,10 @@ const client = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { topic } = await req.json();
+    const { theme } = await req.json();
 
-    const prompt = topic
-      ? `Generate a creative startup idea related to "${topic}". Include a short description and potential market.`
+    const prompt = theme
+      ? `Generate a creative startup idea related to "${theme}". Include a short description and potential market.`
       : "Generate a random unique startup idea with a catchy name, short description, and potential audience.";
 
     const completion = await client.chat.completions.create({

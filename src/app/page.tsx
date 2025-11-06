@@ -1,11 +1,13 @@
 "use client";
 
+import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
 export default function HomePage() {
   const [theme, setTheme] = useState("");
   const [idea, setIdea] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const generateIdea = async () => {
     if (!theme.trim()) {
@@ -15,6 +17,7 @@ export default function HomePage() {
 
     setLoading(true);
     setIdea(null);
+    setCopied(false);
 
     try {
       const response = await fetch("/api/generate", {
@@ -29,6 +32,14 @@ export default function HomePage() {
       setIdea("Error generating idea. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    if (idea) {
+      await navigator.clipboard.writeText(idea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -60,13 +71,20 @@ export default function HomePage() {
         </button>
       </div>
 
-      <div className="mt-6 max-w-3xl w-full">
+      <div className="mt-6 max-w-3xl w-full relative">
         {loading && (
           <div className="animate-pulse text-neutral-500">Thinking of something brilliant...</div>
         )}
 
         {idea && (
-          <div className="mt-6 bg-white shadow-sm border border-neutral-200 rounded-2xl p-6 text-left whitespace-pre-line fade-in">
+          <div className="mt-6 bg-white shadow-sm border border-neutral-200 rounded-2xl p-6 text-left whitespace-pre-line fade-in relative">
+            <button
+              onClick={handleCopy}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-black transition"
+              title="Copy to clipboard"
+            >
+              {copied ? <Check size={18} /> : <Copy size={18} />}
+            </button>
             {idea}
           </div>
         )}
