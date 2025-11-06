@@ -1,69 +1,76 @@
 "use client";
+
 import { useState } from "react";
 
 export default function HomePage() {
-  const [idea, setIdea] = useState("");
+  const [theme, setTheme] = useState("");
+  const [idea, setIdea] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [topic, setTopic] = useState("");
 
   const generateIdea = async () => {
+    if (!theme.trim()) {
+      setIdea("Please enter a theme before generating.");
+      return;
+    }
+
     setLoading(true);
-    setIdea("");
+    setIdea(null);
 
     try {
-      const res = await fetch("/api/generate", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ theme }),
       });
 
-      const data = await res.json();
+      const data = await response.json();
       setIdea(data.idea || "No idea generated.");
-    } catch (error) {
-      setIdea("Error generating idea.");
+    } catch (err) {
+      setIdea("Error generating idea. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen px-4">
-      <h1 className="text-4xl font-bold mb-4 text-center">🚀 Startup Idea Generator</h1>
-
-      <p className="text-neutral-600 mb-6 text-center max-w-md">
-        Type a topic or leave empty to get a random startup idea powered by AI.
+    <div className="flex flex-col items-center justify-center py-20 px-6 text-center min-h-[80vh]">
+      <h2 className="text-3xl sm:text-4xl font-semibold mb-4">AI Startup Idea Generator</h2>
+      <p className="text-neutral-600 max-w-2xl mb-8">
+        Enter a theme or keyword and let AI craft a unique startup concept for you in seconds.
       </p>
 
-      <div className="flex gap-2 mb-6 w-full max-w-md">
+      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg mb-6">
         <input
           type="text"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          placeholder="e.g. health tech, music, education..."
-          className="flex-1 px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-800"
+          placeholder="e.g. health, education, blockchain..."
+          value={theme}
+          onChange={(e) => setTheme(e.target.value)}
+          className="flex-1 px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
         />
         <button
           onClick={generateIdea}
           disabled={loading}
-          className="px-6 py-2 bg-black text-white rounded-lg hover:bg-neutral-800 transition disabled:opacity-50"
+          className={`px-6 py-3 rounded-xl font-medium transition ${
+            loading
+              ? "bg-neutral-300 cursor-not-allowed"
+              : "bg-black text-white hover:bg-neutral-800"
+          }`}
         >
           {loading ? "Generating..." : "Generate"}
         </button>
       </div>
 
-      <div className="w-full max-w-2xl text-left">
+      <div className="mt-6 max-w-3xl w-full">
         {loading && (
-          <p className="text-neutral-500 text-center animate-pulse">
-            Thinking of something brilliant...
-          </p>
+          <div className="animate-pulse text-neutral-500">Thinking of something brilliant...</div>
         )}
 
-        {idea && !loading && (
-          <div className="bg-white p-6 rounded-xl shadow-md text-neutral-800 whitespace-pre-line leading-relaxed">
+        {idea && (
+          <div className="mt-6 bg-white shadow-sm border border-neutral-200 rounded-2xl p-6 text-left whitespace-pre-line fade-in">
             {idea}
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
